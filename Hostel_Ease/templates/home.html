@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+    <h1>Welcome, {{ request.user.username }}</h1>
+    {% if request.user.role == "student" %}
+        <p>Here are your available hostels to apply:</p>
+    {% elif request.user.role == "warden" %}
+        <p>Here are the pending applications to approve:</p>
+    {% endif %}
+    <p><a href="{% url 'logout' %}">Logout</a></p>
+{% endblock %}
