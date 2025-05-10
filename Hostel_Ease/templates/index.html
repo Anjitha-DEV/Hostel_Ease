@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="container">
+        <h2>Welcome to HostelEase</h2>
+        <ul class="district-list">
+            {% for district in districts %}
+                <li>
+                    {{ district.name }}
+                    <a href="{% url 'hostel_list' district.id %}" class="view-button">View Hostels</a>
+                </li>
+            {% empty %}
+                <p>No districts available. Please contact the administrator.</p>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}
