@@ -28,17 +28,18 @@ class District(models.Model):
 class Hostel(models.Model):
     name = models.CharField(max_length=100)
     district = models.ForeignKey(District, on_delete=models.CASCADE)
-    location = models.TextField()
+    location = models.CharField(max_length=255)
     contact_email = models.EmailField()
     phone_number = models.CharField(max_length=15)
-    available_rooms = models.IntegerField()
-    total_rooms = models.IntegerField()
-    price_per_month = models.DecimalField(max_digits=8, decimal_places=2)
+    available_rooms = models.PositiveIntegerField()
+    total_rooms = models.PositiveIntegerField()
+    price_per_month = models.DecimalField(max_digits=10, decimal_places=2)
+    description = models.TextField()
     image = models.ImageField(upload_to='hostel_images/', blank=True, null=True)
-    description = models.TextField(blank=True)
+    warden = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='managed_hostels')
 
-    def _str_(self):
-        return f"{self.name} ({self.district.name})"
+    def __str__(self):
+        return self.name
     
 class Mess(models.Model):
     hostel = models.OneToOneField(Hostel, on_delete=models.CASCADE)
