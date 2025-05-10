@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="container">
+        <h2>Welcome, {{ user.username }}!</h2>
+        <p>Welcome to HostelEase, your platform for finding and managing hostels.</p>
+
+        {% if user.role == "student" %}
+            <h3>Your Actions</h3>
+            <a href="{% url 'index' %}" class="view-button">Apply for Hostel</a>
+
+            <h3>Your Recent Applications</h3>
+            {% if applications %}
+                <ul class="application-list">
+                    {% for application in applications %}
+                        <li>
+                            <strong>{{ application.hostel.name }}</strong> ({{ application.hostel.district.name }})<br>
+                            Status: {{ application.status }}<br>
+                            Applied on: {{ application.applied_at|date:"d M Y" }}
+                        </li>
+                    {% endfor %}
+                </ul>
+                <p><a href="{% url 'profile' %}">View All Applications</a></p>
+            {% else %}
+                <p>You haven't applied for any hostels yet.</p>
+            {% endif %}
+
+        {% elif user.role == "warden" %}
+            <h3>Your Actions</h3>
+            <a href="{% url 'register_hostel' %}" class="view-button">Register Hostel</a>
+
+            <h3>Pending Applications</h3>
+            {% if pending_applications %}
+                <ul class="application-list">
+                    {% for application in pending_applications %}
+                        <li>
+                            <strong>{{ application.student.username }}</strong> for <strong>{{ application.hostel.name }}</strong><br>
+                            Applied on: {{ application.applied_at|date:"d M Y" }}<br>
+                            <a href="{% url 'approve_application' application.id %}" class="view-button approve-button">Approve</a>
+                            <a href="{% url 'reject_application' application.id %}" class="view-button reject-button">Reject</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No pending applications for your hostels.</p>
+            {% endif %}
+
+            <h3>Your Managed Hostels</h3>
+            {% if managed_hostels %}
+                <ul class="hostel-list">
+                    {% for hostel in managed_hostels %}
+                        <li>
+                            <strong>{{ hostel.name }}</strong> ({{ hostel.district.name }})<br>
+                            Available Rooms: {{ hostel.available_rooms }}/{{ hostel.total_rooms }}
+                        </li>
+                    {% endfor %}
+                </ul>
+                <p><a href="{% url 'profile' %}">Manage Hostels</a></p>
+            {% else %}
+                <p>You haven't registered any hostels yet.</p>
+            {% endif %}
+        {% endif %}
+    </div>
+{% endblock %}
