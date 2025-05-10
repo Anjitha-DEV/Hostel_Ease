@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+    <div class="container">
+        <h2>Hostels in {{ district.name }}</h2>
+        <ul class="hostel-list">
+            {% for hostel in hostels %}
+                <li>
+                    {% if hostel.image %}
+                        <img src="{{ hostel.image.url }}" alt="{{ hostel.name }}" class="hostel-image">
+                    {% else %}
+                        <img src="{% static 'images/placeholder.jpg' %}" alt="No image" class="hostel-image">
+                    {% endif %}
+                    <div class="hostel-details">
+                        <strong>{{ hostel.name }}</strong><br>
+                        Location: {{ hostel.location }}<br>
+                        Price: ₹{{ hostel.price_per_month }}/month<br>
+                        Available Rooms: {{ hostel.available_rooms }}/{{ hostel.total_rooms }}<br>
+                        Contact: {{ hostel.phone_number }} | {{ hostel.contact_email }}<br>
+                        Description: {{ hostel.description|truncatewords:20 }}<br>
+                        {% if request.user.role == "student" %}
+                            <a href="{% url 'apply_hostel' hostel.id %}" class="view-button">Apply</a>
+                        {% endif %}
+                    </div>
+                </li>
+            {% empty %}
+                <p>No hostels available in {{ district.name }}.</p>
+            {% endfor %}
+        </ul>
+        <p><a href="{% url 'index' %}">Back</a></p>
+    </div>
+{% endblock %}

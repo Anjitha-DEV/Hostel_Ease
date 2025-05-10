@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="container">
+        <h2>Apply for {{ hostel.name }}</h2>
+        <p>Are you sure you want to apply for {{ hostel.name }} in {{ hostel.district.name }}?</p>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Confirm Application</button>
+        </form>
+        <p><a href="{% url 'hostel_list' hostel.district.id %}">Cancel</a></p>
+    </div>
+{% endblock %}
